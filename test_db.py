@@ -41,21 +41,12 @@ class DB:
         self.cur.execute(sql_statement)
         self.con.commit()
 
+    def find(self, table, conditions):
+        # conditions: where clause condition
+
+        sql_statement = f'SELECT * FROM {table} WHERE {conditions}'
+        a = self.cur.execute(sql_statement)
+        return a.fetchall()
+
 
 db = DB("pugsey.db")
-
-db.insert('dhruvzi', {'id': '10', 'pugs': '99'})
-a = db.select_all()
-
-print(a)
-#con = None
-# try:
-#    con = sql.connect('pugsey.db')
-#    cur = con.cursor()
-#    cur.execute('CREATE TABLE dhruvzi(id INT, pugs INT)')
-# except sql.Error:
-#    print("Error")
-#    sys.exit(1)
-# finally:
-# if con:
-#    con.close()

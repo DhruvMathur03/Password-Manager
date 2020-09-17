@@ -1,4 +1,6 @@
 import cli_ui
+import sqlite3 as sql
+import sys
 
 
 def login():
@@ -30,9 +32,6 @@ def sign_in():
 
     return
 
-
-dict1 = {"pugsey": "12345", "dhruv": "123456", "yash": "1234567"}
-lst = ["d@gmail.com", "y@gmail.com", "p@gmail.com"]
 
 choices = ['Login', 'Sign Up']
 c = cli_ui.ask_choice("Would you like to", choices=choices)

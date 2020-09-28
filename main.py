@@ -1,43 +1,57 @@
 import cli_ui
 import sqlite3 as sql
 import sys
+import db
+
+
+class User:
+    email = None
+
+    def __init__(self, email):
+        self.email = email
+
+
+database = db.DB("pugsey.db")
+logged_in_user = None
 
 
 def login():
-    usrnm = cli_ui.ask_string("Username")
-    pwd = cli_ui.ask_password("Password")
+    print("Login")
+    email = cli_ui.ask_string("Email")
+    password = cli_ui.ask_password("Password")
 
-    if usrnm in dict1 and dict1[usrnm] == pwd:
-        print("Logged in :)")
-    else:
-        print("Wrong Username/Password")
+    does_user_exist = database.find(
+        'Users', f'email = "{email}" and password = "{password}"')
 
-    return
+    logged_in_user = User(email) if len(logged_in_user)
+
+    return len(does_user_exist)
 
 
-def sign_in():
+def sign_up():
+    print("Sign up")
     email = cli_ui.ask_string("Please enter Email ID")
+    does_email_exist = database.find('Users', f'email = "{email}"')
 
-    if email in lst:
+    if len(does_email_exist) > 0:
         print("An account linked to this ID already exists")
+        return False
     else:
-        lst.append(email)
-        usrnm1 = cli_ui.ask_string("Please enter username")
-
-        if usrnm1 in dict1:
-            print("Username already exists, please try again")
-        else:
-            pwd1 = cli_ui.ask_password("please enter password")
-            dict1[usrnm1] = pwd1
-
-    return
+        pwd1 = cli_ui.ask_password("please enter password")
+        database.insert('Users', {'email': email, 'password': pwd1})
+        return login()
 
 
-choices = ['Login', 'Sign Up']
-c = cli_ui.ask_choice("Would you like to", choices=choices)
-print(c)
+choices = ['Login', 'Sign Up', 'Exit']
 
-if c == "Login":
-    login()
-elif c == "Sign Up":
-    sign_in()
+flag = False
+
+while not flag:
+    c = cli_ui.ask_choice("Would you like to", choices=choices)
+
+    if c == "Login":
+        flag = login()
+    elif c == "Sign Up":
+        flag = sign_up()
+    elif c == "Exit":
+        sys.exit(0)

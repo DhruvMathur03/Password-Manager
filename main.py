@@ -4,13 +4,6 @@ import sys
 import db
 
 
-class User:
-    email = None
-
-    def __init__(self, email):
-        self.email = email
-
-
 database = db.DB("pugsey.db")
 logged_in_user = None
 
@@ -20,10 +13,7 @@ def login():
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
 
-    does_user_exist = database.find(
-        'Users', f'email = "{email}" and password = "{password}"')
-
-    logged_in_user = User(email) if len(logged_in_user)
+    logged_in_user = User(email, database) if len(logged_in_user)
 
     return len(does_user_exist)
 

@@ -24,18 +24,16 @@ class DB:
 
         return all_rows.fetchall()
 
-    def insert(self, table, column_values):
-        # column_values = {'useranem': 'dhruv', 'password': 'yash', 'email': 'sadbhjasbdj@njfsd.com'}
-        # columns_name = column_values.keys()
-        # c1, c2, c3
-        # v1, v2, v3
+    def fetch_column(self, table, col_name):
+        all_rows = self.cur.execute(f'SELECT {col_name} FROM {table}')
 
-        # {'c1': v1, }.
-        # column_names = ['username', 'password', 'email'] => "username, password, email"
-        # values = "dhruv, yash, sdjhfbdsjhfbdsjh@ngsjdk.com"
+        return all_rows.fetchall()
+
+    def insert(self, table, column_values):
         s = ","
         col_names_string = s.join(column_values.keys())
-        values = s.join(column_values.values())
+        wrapped_values = map(lambda v: f'"{v}"', column_values.values())
+        values = s.join(list(wrapped_values))
         sql_statement = f'INSERT INTO {table}({col_names_string}) VALUES({values})'
         print(sql_statement)
         self.cur.execute(sql_statement)
@@ -47,6 +45,3 @@ class DB:
         sql_statement = f'SELECT * FROM {table} WHERE {conditions}'
         a = self.cur.execute(sql_statement)
         return a.fetchall()
-
-
-db = DB("pugsey.db")

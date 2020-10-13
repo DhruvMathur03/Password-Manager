@@ -13,9 +13,14 @@ def login():
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
 
-    logged_in_user = User(email, database) if len(logged_in_user)
+    does_user_exist = database.find(
+        'Users', f'password = "{password}", email = "{email}"')
 
-    return len(does_user_exist)
+    if len(does_user_exist) > 0:
+        print("Logged in")
+    else:
+        print("Incorrect ID or Password")
+        return login()
 
 
 def sign_up():

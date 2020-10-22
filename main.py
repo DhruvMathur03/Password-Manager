@@ -9,34 +9,21 @@ logged_in_user = None
 user_info = None
 
 
-def initial():
-    c = cli_ui.ask_choice("Would you like to", choices=choices)
-
-    if c == "Login":
-        flag = login()
-    elif c == "Sign Up":
-        flag = sign_up()
-    elif c == "Exit":
-        sys.exit(0)
-
-
 def login():
+    global email
     print("Login")
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
-    user_info = user.User(f'{email}', database)
 
     does_user_exist = database.find(
         'Users', f'email = "{email}" AND password="{password}"')
 
     if len(does_user_exist) > 0:
         print("Logged in")
-        info = user_info.get_all_password()
-        print(info)
-        sys.exit(0)
-    elif len(does_user_exist) == 0:
+        return True
+    else:
         print("Incorrect ID or Password")
-        return initial()
+        return False
 
 
 def sign_up():
@@ -65,4 +52,17 @@ while not flag:
     elif c == "Sign Up":
         flag = sign_up()
     elif c == "Exit":
+        sys.exit(0)
+
+logged_in_choices = ['View Stored Passwords', 'Log Out']
+
+while flag:
+    c = cli_ui.ask_choice("Would you like to", choices=logged_in_choices)
+    user_info = user.User(f'{email}', database)
+
+    if c == 'View Stored Passwords':
+        info = user_info.get_all_password()
+        print(info)
+
+    elif c == 'Log Out':
         sys.exit(0)

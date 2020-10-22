@@ -26,7 +26,7 @@ class User:
             current_entry = b[i]
 
             return_arr.append(
-                {username: current_entry['username'], website: current_entry['website'], password: current_entry['password']})
+                {'website': current_entry[1], 'username': current_entry[2], 'password': current_entry[3]})
 
             # res = map(lambda row: return {username: row['username'], website: row['website'], password: row['password']}, b)
 

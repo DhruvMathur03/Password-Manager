@@ -10,8 +10,6 @@ class DB:
         try:
             self.con = sql.connect(db_name)
             self.cur = self.con.cursor()
-            # enable ferign key constraint checks
-            self.cur.execute("PRAGMA foreign_keys=ON;")
         except sql.Error:
             print("Error")
             sys.exit(1)

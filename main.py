@@ -2,34 +2,36 @@ import cli_ui
 import sqlite3 as sql
 import sys
 import db
-import user
+
+
+class User:
+    email = None
+
+    def __init__(self, email):
+        self.email = email
+
 
 database = db.DB("pugsey.db")
 logged_in_user = None
-user_info = None
 
 
 def login():
-    global email
     print("Login")
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
 
     does_user_exist = database.find(
-        'Users', f'email = "{email}" AND password="{password}"')
+        'Users', f'email = "{email}" and password = "{password}"')
 
-    if len(does_user_exist) > 0:
-        print("Logged in")
-        return True
-    else:
-        print("Incorrect ID or Password")
-        return False
+    logged_in_user = User(email) if len(logged_in_user)
+
+    return len(does_user_exist)
 
 
 def sign_up():
     print("Sign up")
     email = cli_ui.ask_string("Please enter Email ID")
-    does_email_exist = database.find('Users', f'email = {email}')
+    does_email_exist = database.find('Users', f'email = "{email}"')
 
     if len(does_email_exist) > 0:
         print("An account linked to this ID already exists")
@@ -52,17 +54,4 @@ while not flag:
     elif c == "Sign Up":
         flag = sign_up()
     elif c == "Exit":
-        sys.exit(0)
-
-logged_in_choices = ['View Stored Passwords', 'Log Out']
-
-while flag:
-    c = cli_ui.ask_choice("Would you like to", choices=logged_in_choices)
-    user_info = user.User(f'{email}', database)
-
-    if c == 'View Stored Passwords':
-        info = user_info.get_all_password()
-        print(info)
-
-    elif c == 'Log Out':
         sys.exit(0)

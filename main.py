@@ -7,18 +7,21 @@ import user
 
 database = db.DB("pugsey.db")
 logged_in_user = None
-user_info == None
+user_info = None
 
 
 def login():
+    global user_info
+    global does_user_exist
     print("Login")
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
 
     does_user_exist = database.find(
-        'Users', f'email = "{email}" AND password="{password}"'))
+        'Users', f'email = "{email}" AND password="{password}"')
 
     if len(does_user_exist) > 0:
+        user_info = user.User(f'{email}', database)
         print("Logged in")
         return True
     else:
@@ -28,41 +31,54 @@ def login():
 
 def sign_up():
     print("Sign up")
-    email=cli_ui.ask_string("Please enter Email ID")
-    does_email_exist=database.find('Users', f'email = "{email}"')
+    email = cli_ui.ask_string("Please enter Email ID")
+    does_email_exist = database.find('Users', f'email = "{email}"')
 
     if len(does_email_exist) > 0:
         print("An account linked to this ID already exists")
         return False
     else:
-        pwd1=cli_ui.ask_password("please enter password")
+        pwd1 = cli_ui.ask_password("please enter password")
         database.insert('Users', {'email': email, 'password': pwd1})
         return login()
 
 
-choices=['Login', 'Sign Up', 'Exit']
+def add_passwords():
+    website = cli_ui.ask_string("Please enter the website\'s name")
+    username = cli_ui.ask_string("Please enter your username")
+    password = cli_ui.ask_string("Please enter your password")
+    tup = does_user_exist[0]
+    user_ID = tup[0]
+    insert_info = database.insert('user_data', {
+                                  'website': f'{website}', 'username': f'{username}', 'password': f'{password}', 'user_ID': f'{user_ID}'})
+    return True
 
-flag=False
+
+choices = ['Login', 'Sign Up', 'Exit']
+
+flag = False
 
 while not flag:
-    c=cli_ui.ask_choice("Would you like to", choices = choices)
+    c = cli_ui.ask_choice("Would you like to", choices=choices)
 
     if c == "Login":
-        flag=login()
+        flag = login()
     elif c == "Sign Up":
-        flag=sign_up()
+        flag = sign_up()
     elif c == "Exit":
         sys.exit(0)
 
-logged_in_choices=['View Stored Passwords', 'Log Out']
+logged_in_choices = ['View Stored Passwords', 'Log Out', 'Add New Passwords']
 
 while flag:
-    c=cli_ui.ask_choice("Would you like to", choices = logged_in_choices)
-    user_info=user.User(f'{email}', database)
+    c = cli_ui.ask_choice("Would you like to", choices=logged_in_choices)
 
     if c == 'View Stored Passwords':
-        info=user_info.get_all_password()
+        info = user_info.get_all_password()
         print(info)
 
     elif c == 'Log Out':
         sys.exit(0)
+
+    elif c == 'Add New Passwords':
+        flag = add_passwords()

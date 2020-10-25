@@ -2,6 +2,7 @@ import cli_ui
 import sqlite3 as sql
 import sys
 import db
+from prettytable import PrettyTable
 
 
 class User:
@@ -17,17 +18,13 @@ class User:
     def get_all_password(self):
         b = self.database.find('user_data', f'user_ID = {self.user_id}')
 
-        return_arr = []
+        table = PrettyTable(["Website", "Username", "Password"])
 
         for i in range(len(b)):
-            current_entry = b[i]
-
-            return_arr.append(
-                {'website': current_entry[1], 'username': current_entry[2], 'password': current_entry[3]})
-
+            table.add_row(b[i][1:4])
         # res = map(lambda row: return {username: row['username'], website: row['website'], password: row['password']}, b)
 
-        return return_arr  # list(res)
+        return table  # list(res)
 
     def add_password(self, website, username, password):
         self.database.insert('user_data', {
@@ -37,26 +34,19 @@ class User:
         account_details = self.database.find(
             'user_data', f'website = "{website}" AND user_ID = {self.user_id}')
 
-        final_list = []
+        table = PrettyTable(["Username", "Password"])
 
         for i in range(len(account_details)):
-            current_list = account_details[i]
+            table.add_row(account_details[i][2:4])
 
-            final_list.append(
-                {'username': current_list[2], 'password': current_list[3]})
-
-        return final_list
+        return table
 
     def filter_username(self, username):
         account_details = self.database.find(
             'user_data', f'username = "{username}" AND user_ID = {self.user_id}')
-
-        final_list = []
+        table = PrettyTable(["Website", "Password"])
 
         for i in range(len(account_details)):
-            current_list = account_details[i]
+            table.add_row([account_details[i][1], account_details[i][3]])
 
-            final_list.append(
-                {'website': current_list[1], 'password': current_list[3]})
-
-        return final_list
+        return table

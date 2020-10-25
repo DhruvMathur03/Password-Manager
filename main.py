@@ -21,7 +21,7 @@ def login():
         'Users', f'email = "{email}" AND password="{password}"')
 
     if len(does_user_exist) > 0:
-        user_info = user.User(f'{email}', database)
+        user_info = user.User(does_user_exist[0][0], email, database)
         print("Logged in")
         return True
     else:
@@ -47,41 +47,18 @@ def add_passwords():
     website = cli_ui.ask_string("Please enter the website\'s name")
     username = cli_ui.ask_string("Please enter your username")
     password = cli_ui.ask_string("Please enter your password")
-    tup = does_user_exist[0]
-    user_ID = tup[0]
-    insert_info = database.insert('user_data', {
-                                  'website': f'{website}', 'username': f'{username}', 'password': f'{password}', 'user_ID': f'{user_ID}'})
+    user_info.add_password(website, username, password)
     return True
 
 
 def filter_website():
     website = cli_ui.ask_string("Please enter the name of the website")
-    account_details = database.find('user_data', f'website = "{website}"')
-
-    final_list = []
-
-    for i in range(len(account_details)):
-        current_list = account_details[i]
-
-        final_list.append(
-            {'username': current_list[2], 'password': current_list[3]})
-
-    return final_list
+    return user_info.filter_website(website)
 
 
 def filter_username():
     username = cli_ui.ask_string("Please enter your common Username")
-    account_details = database.find('user_data', f'username = "{username}"')
-
-    final_list = []
-
-    for i in range(len(account_details)):
-        current_list = account_details[i]
-
-        final_list.append(
-            {'website': current_list[1], 'password': current_list[3]})
-
-    return final_list
+    return user_info.filter_username(username)
 
 
 choices = ['Login', 'Sign Up', 'Exit']

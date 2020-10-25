@@ -54,6 +54,36 @@ def add_passwords():
     return True
 
 
+def filter_website():
+    website = cli_ui.ask_string("Please enter the name of the website")
+    account_details = database.find('user_data', f'website = "{website}"')
+
+    final_list = []
+
+    for i in range(len(account_details)):
+        current_list = account_details[i]
+
+        final_list.append(
+            {'username': current_list[2], 'password': current_list[3]})
+
+    return final_list
+
+
+def filter_username():
+    username = cli_ui.ask_string("Please enter your common Username")
+    account_details = database.find('user_data', f'username = "{username}"')
+
+    final_list = []
+
+    for i in range(len(account_details)):
+        current_list = account_details[i]
+
+        final_list.append(
+            {'website': current_list[1], 'password': current_list[3]})
+
+    return final_list
+
+
 choices = ['Login', 'Sign Up', 'Exit']
 
 flag = False
@@ -70,12 +100,25 @@ while not flag:
 
 logged_in_choices = ['View Stored Passwords', 'Log Out', 'Add New Passwords']
 
+achoices = ['Filter by Website', 'Filter by Username', 'View All']
+
 while flag:
     c = cli_ui.ask_choice("Would you like to", choices=logged_in_choices)
 
     if c == 'View Stored Passwords':
-        info = user_info.get_all_password()
-        print(info)
+        a = cli_ui.ask_choice("Would you like to", choices=achoices)
+
+        if a == 'Filter by Website':
+            info = filter_website()
+            print(info)
+
+        elif a == 'Filter by Username':
+            info = filter_username()
+            print(info)
+
+        elif a == 'View All':
+            info = user_info.get_all_password()
+            print(info)
 
     elif c == 'Log Out':
         sys.exit(0)

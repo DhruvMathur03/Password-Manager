@@ -23,11 +23,11 @@ def login():
 
     if len(does_user_exist) > 0:
         user_info = user.User(does_user_exist[0][0], email, database)
-        print('\033[H\033[J')
+        helper.clear_screen()
         print("Logged in")
         return True
     else:
-        print('\033[H\033[J')
+        helper.clear_screen()
         print("Incorrect ID or Password")
         return False
 
@@ -38,13 +38,13 @@ def sign_up():
     does_email_exist = database.find('Users', f'email = "{email}"')
 
     if len(does_email_exist) > 0:
-        print('\033[H\033[J')
+        helper.clear_screen()
         print("An account linked to this ID already exists")
         return False
     else:
         pwd1 = cli_ui.ask_password("please enter password")
         database.insert('Users', {'email': email, 'password': pwd1})
-        print('\033[H\033[J')
+        helper.clear_screen()
         return login()
 
 
@@ -64,12 +64,12 @@ def add_passwords():
         if choice == True:
             user_info.add_password(website, username, password)
         elif choice == False:
-            print('\033[H\033[J')
+            helper.clear_screen()
             add_passwords()
     elif choice1 == False:
         password1 = cli_ui.ask_string("Please enter your password")
         user_info.add_password(website, username, password1)
-        print('\033[H\033[J')
+        helper.clear_screen()
     return True
 
 
@@ -110,25 +110,25 @@ while flag:
 
         if a == 'Filter by Website':
             info = filter_website()
-            print('\033[H\033[J')
+            helper.clear_screen()
             print(info)
 
         elif a == 'Filter by Username':
             info = filter_username()
-            print('\033[H\033[J')
+            helper.clear_screen()
             print(info)
 
         elif a == 'View All':
             info = user_info.get_all_password()
-            print('\033[H\033[J')
+            helper.clear_screen()
             print(info)
 
     elif c == 'Log Out':
-        print('\033[H\033[J')
+        helper.clear_screen()
         sys.exit(0)
 
     elif c == 'Add New Passwords':
-        print('\033[H\033[J')
+        helper.clear_screen()
         flag = add_passwords()
 
     elif c == 'Generate New Password':
@@ -142,9 +142,9 @@ while flag:
         if choice == True:
             website = cli_ui.ask_string("Enter the website name")
             username = cli_ui.ask_string("Enter the username")
-            print('\033[H\033[J')
+            helper.clear_screen()
             user_info.add_password(website, username, password)
 
         elif choice == False:
-            print('\033[H\033[J')
+            helper.clear_screen()
             flag = True

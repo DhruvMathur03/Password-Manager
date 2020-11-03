@@ -37,7 +37,6 @@ class DB:
         wrapped_values = map(lambda v: f'"{v}"', column_values.values())
         values = s.join(list(wrapped_values))
         sql_statement = f'INSERT INTO {table}({col_names_string}) VALUES({values})'
-        print(sql_statement)
         self.cur.execute(sql_statement)
         self.con.commit()
 

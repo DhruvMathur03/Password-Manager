@@ -50,3 +50,46 @@ class User:
             table.add_row([account_details[i][1], account_details[i][3]])
 
         return table
+
+    def edit(self, changes):
+        website = tup[0]
+        username = tup[1]
+
+        self.database.modify('user_data', changes,
+                             f'website = "{website}" AND username = "{username}"')
+
+    def edit2(self):
+        global tup
+
+        account = self.database.find('user_data', f'user_ID = {self.user_id}')
+
+        account1 = []
+
+        for i in range(len(account)):
+
+            account1.append(account[i][1:3])
+
+        choices = account1
+
+        tup = cli_ui.ask_choice(
+            "Which account would you like to edit", choices=choices)
+
+    def delete(self):
+        account = self.database.find('user_data', f'user_ID = {self.user_id}')
+
+        account1 = []
+
+        for i in range(len(account)):
+
+            account1.append(account[i][1:3])
+
+        choices = account1
+
+        tup1 = cli_ui.ask_choice(
+            "Which account would you like to delete", choices=choices)
+
+        website = tup1[0]
+        username = tup1[1]
+
+        self.database.delete('user_data',
+                             f'website = "{website}" AND username = "{username}"')

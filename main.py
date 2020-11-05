@@ -83,6 +83,37 @@ def filter_username():
     return user_info.filter_username(username)
 
 
+def edit():
+    user_info.edit2()
+
+    choices = ['Password', 'Username', 'Username and Password']
+    a = cli_ui.ask_choice("What would you like to edit?", choices=choices)
+
+    if a == 'Password':
+        new_password = cli_ui.ask_string("Enter new Password")
+        user_info.edit(f'password = "{new_password}"')
+        helper.clear_screen()
+        return True
+    elif a == 'Username':
+        new_username = cli_ui.ask_string("Enter new Username")
+        user_info.edit(f'username = "{new_username}"')
+        helper.clear_screen()
+        return True
+    elif a == 'Username and Password':
+        new_password = cli_ui.ask_string("Enter new Password")
+        new_username = cli_ui.ask_string("Enter new Username")
+        user_info.edit(
+            f'username = "{new_username}" AND password = "{new_password}"')
+        helper.clear_screen()
+        return True
+
+
+def delete():
+    user_info.delete()
+    helper.clear_screen()
+    return True
+
+
 choices = ['Login', 'Sign Up', 'Exit']
 
 flag = False
@@ -98,7 +129,7 @@ while not flag:
         sys.exit(0)
 
 logged_in_choices = ['View Stored Passwords', 'Log Out',
-                     'Add New Passwords', 'Generate New Password']
+                     'Add New Passwords', 'Generate New Password', 'Edit Passwords', 'Delete Passwords']
 
 achoices = ['Filter by Website', 'Filter by Username', 'View All']
 
@@ -148,3 +179,11 @@ while flag:
         elif choice == False:
             helper.clear_screen()
             flag = True
+
+    elif c == 'Edit Passwords':
+        helper.clear_screen()
+        flag = edit()
+
+    elif c == 'Delete Passwords':
+        helper.clear_screen()
+        flag = delete()

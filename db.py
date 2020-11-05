@@ -46,3 +46,13 @@ class DB:
         sql_statement = f'SELECT * FROM {table} WHERE {conditions}'
         a = self.cur.execute(sql_statement)
         return a.fetchall()
+
+    def modify(self, table, changes, conditions):
+        sql_statement = f'UPDATE {table} SET {changes} WHERE {conditions}'
+        self.cur.execute(sql_statement)
+        self.con.commit()
+
+    def delete(self, table, conditions):
+        sql_statement = f'DELETE FROM {table} WHERE {conditions}'
+        self.cur.execute(sql_statement)
+        self.con.commit()

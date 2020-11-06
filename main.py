@@ -84,7 +84,7 @@ def filter_username():
 
 
 def edit():
-    user_info.edit2()
+    user_info.edit_account_choice()
 
     choices = ['Password', 'Username', 'Username and Password']
     a = cli_ui.ask_choice("What would you like to edit?", choices=choices)

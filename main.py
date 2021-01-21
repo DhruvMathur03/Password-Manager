@@ -7,17 +7,17 @@ import helper
 import clipboard
 
 database = db.DB("pugsey.db")
-logged_in_user = None
-#user_info = None
 
 def login():
+    global user_info
     print("Login")
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
     does_user_exist = database.find(
         'Users', f'email = "{email}" AND password="{password}"')
+
     if len(does_user_exist) > 0:
-        login.user_info = user.User(does_user_exist[0][0], email, database)
+        user_info = user.User(does_user_exist[0][0], email, database)
         helper.clear_screen()
         print("Logged in")
         return True
@@ -30,6 +30,7 @@ def sign_up():
     print("Sign up")
     email = cli_ui.ask_string("Please enter Email ID")
     does_email_exist = database.find('Users', f'email = "{email}"')
+
     if len(does_email_exist) > 0:
         helper.clear_screen()
         print("An account linked to this ID already exists")
@@ -45,6 +46,7 @@ def add_passwords():
     username = cli_ui.ask_string("Please enter your username")
     choice1 = cli_ui.ask_yes_no(
         "Would you like to generate a new password?", default=False)
+
     if choice1 == True:
         length = int(input("Enter required Length of Password :"))
         password = helper.password_generator(length)
@@ -54,49 +56,51 @@ def add_passwords():
         choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
         if choice == True:
-            login.user_info.add_password(website, username, password)
+            user_info.add_password(website, username, password)
         elif choice == False:
             helper.clear_screen()
             add_passwords()
     elif choice1 == False:
         password1 = cli_ui.ask_string("Please enter your password")
-        login.user_info.add_password(website, username, password1)
+        user_info.add_password(website, username, password1)
         helper.clear_screen()
+
     return True
 
 def filter_website():
     website = cli_ui.ask_string("Please enter the name of the website")
-    return login.user_info.filter_website(website)
+    return user_info.filter_website(website)
 
 def filter_username():
     username = cli_ui.ask_string("Please enter your common Username")
-    return login.user_info.filter_username(username)
+    return user_info.filter_username(username)
 
 def edit():
-    login.user_info.edit_account_choice()
-    
+    user_info.edit_account_choice()
     choices = ['Password', 'Username', 'Username and Password']
     a = cli_ui.ask_choice("What would you like to edit?", choices=choices)
+
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        login.user_info.edit(f'password = "{new_password}"')
+        user_info.edit(f'password = "{new_password}"')
         helper.clear_screen()
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        login.user_info.edit(f'username = "{new_username}"')
+        user_info.edit(f'username = "{new_username}"')
         helper.clear_screen()
         return True
     elif a == 'Username and Password':
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
-        login.user_info.edit(
+        user_info.edit(
             f'username = "{new_username}" AND password = "{new_password}"')
         helper.clear_screen()
+
         return True
 
 def delete():
-    login.user_info.delete()
+    user_info.delete()
     helper.clear_screen()
     return True
 
@@ -121,6 +125,7 @@ achoices = ['Filter by Website', 'Filter by Username', 'View All']
 
 while flag:
     c = cli_ui.ask_choice("Would you like to", choices=logged_in_choices)
+    
     if c == 'View Stored Passwords':
         a = cli_ui.ask_choice("Would you like to", choices=achoices)
         if a == 'Filter by Website':
@@ -132,7 +137,7 @@ while flag:
             helper.clear_screen()
             print(info)
         elif a == 'View All':
-            info = login.user_info.get_all_password()
+            info = user_info.get_all_password()
             helper.clear_screen()
             print(info)
     elif c == 'Log Out':
@@ -153,7 +158,7 @@ while flag:
             website = cli_ui.ask_string("Enter the website name")
             username = cli_ui.ask_string("Enter the username")
             helper.clear_screen()
-            login.user_info.add_password(website, username, password)
+            user_info.add_password(website, username, password)
         elif choice == False:
             helper.clear_screen()
             flag = True

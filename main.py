@@ -7,6 +7,7 @@ import helper
 import clipboard
 
 database = db.DB("pugsey.db")
+user_info = None
 
 def login():
     global user_info

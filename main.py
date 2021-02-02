@@ -120,7 +120,7 @@ while not flag:
         sys.exit(0)
 
 logged_in_choices = ['View Stored Passwords', 'Log Out',
-                     'Add New Passwords', 'Generate New Password', 'Edit Passwords', 'Delete Passwords']
+                     'Add New Passwords', 'Generate New Password', 'Edit Passwords', 'Delete Passwords', 'Password Generator']
 
 achoices = ['Filter by Website', 'Filter by Username', 'View All']
 
@@ -169,3 +169,8 @@ while flag:
     elif c == 'Delete Passwords':
         helper.clear_screen()
         flag = delete()
+    elif c == 'Password Generator':
+        helper.clear_screen()
+        helper.password_generator_main()
+        flag = True
+        helper.clear_screen()

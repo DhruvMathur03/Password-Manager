@@ -5,6 +5,7 @@ import db
 import user
 import helper
 import clipboard
+from datetime import date
 
 database = db.DB("pugsey.db")
 user_info = None
@@ -78,24 +79,25 @@ def filter_username():
 
 def edit():
     user_info.edit_account_choice()
+    today = date.today()
     choices = ['Password', 'Username', 'Username and Password']
     a = cli_ui.ask_choice("What would you like to edit?", choices=choices)
 
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        user_info.edit(f'password = "{new_password}"')
+        user_info.edit(f'password = "{new_password}", Date_Modified = "{today}"')
         helper.clear_screen()
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        user_info.edit(f'username = "{new_username}"')
+        user_info.edit(f'username = "{new_username}", Date_Modified = "{today}"')
         helper.clear_screen()
         return True
     elif a == 'Username and Password':
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
         user_info.edit(
-            f'username = "{new_username}" AND password = "{new_password}"')
+            f'username = "{new_username}", password = "{new_password}", Date_Modified = "{today}"')
         helper.clear_screen()
 
         return True

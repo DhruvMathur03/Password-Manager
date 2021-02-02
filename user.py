@@ -3,6 +3,7 @@ import sqlite3 as sql
 import sys
 import db
 from prettytable import PrettyTable
+from datetime import date
 
 class User:
     email = None
@@ -16,32 +17,32 @@ class User:
 
     def get_all_password(self):
         b = self.database.find('user_data', f'user_ID = {self.user_id}')
-        table = PrettyTable(["Website", "Username", "Password"])
+        table = PrettyTable(["Website", "Username", "Password", "Date Created", "Date Modified"])
 
         for i in range(len(b)):
-            table.add_row(b[i][1:4])
+            table.add_row([b[i][1], b[i][2], b[i][3], b[i][5], b[i][6]])
         return table 
 
     def add_password(self, website, username, password):
+        today = date.today()
         self.database.insert('user_data', {
-            'website': website, 'username': username, 'password': password, 'user_ID': self.user_id})
+            'website': website, 'username': username, 'password': password, 'user_ID': self.user_id, 'Date_Created': today})
 
     def filter_website(self, website):
         account_details = self.database.find(
             'user_data', f'website = "{website}" AND user_ID = {self.user_id}')
-        table = PrettyTable(["Username", "Password"])
-
+        table = PrettyTable(["Username", "Password", "Date Created", "Date Modified"])
         for i in range(len(account_details)):
-            table.add_row(account_details[i][2:4])
+            table.add_row([account_details[i][2], account_details[i][3], account_details[i][5], account_details[i][6]])
         return table
 
     def filter_username(self, username):
         account_details = self.database.find(
             'user_data', f'username = "{username}" AND user_ID = {self.user_id}')
-        table = PrettyTable(["Website", "Password"])
+        table = PrettyTable(["Website", "Password", "Date Created", "Date Modified"])
 
         for i in range(len(account_details)):
-            table.add_row([account_details[i][1], account_details[i][3]])
+            table.add_row([account_details[i][1], account_details[i][3], account_details[i][5], account_details[i][6]])
         return table
 
     def edit(self, changes):

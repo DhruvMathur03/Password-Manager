@@ -1,0 +1,8 @@
+for table Users:
+
+create table Users (ID int PRIMARY KEY, email varchar(256), password varchar(256));
+
+for table user_data:
+
+create table user_data (ID int FOREIGN KEY REFERENCES(Users), email varchar(256), username varchar(256), password varchar(256), user_ID
+int PRIMARY KEY, Date_Created date, Date_Modified date);

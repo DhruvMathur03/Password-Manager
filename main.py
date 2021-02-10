@@ -22,7 +22,6 @@ def login():
         helper.clear_screen()
         print("Logged in")
         return True
-
     else:
         helper.clear_screen()
         print("Incorrect ID or Password")
@@ -37,7 +36,6 @@ def sign_up():
         helper.clear_screen()
         print("An account linked to this ID already exists")
         return False
-
     else:
         pwd1 = cli_ui.ask_password("please enter password")
         database.insert('Users', {'email': email, 'password': pwd1})
@@ -59,15 +57,12 @@ def add_passwords():
         password = helper.password_generator_main(type1, type2, type3, type4)
         choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
-
         if choice == True:
             user_info.add_password(website, username, password)
             print("The password has been added.")
-
         elif choice == False:
             helper.clear_screen()
             add_passwords()
-
     elif choice1 == False:
         password1 = cli_ui.ask_string("Please enter your password")
         user_info.add_password(website, username, password1)
@@ -95,14 +90,12 @@ def edit():
         helper.clear_screen()
         print("Records have been updated.")
         return True
-
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
         user_info.edit(f'username = "{new_username}"')
         helper.clear_screen()
         print("Records have been updated.")
         return True
-
     elif a == 'Username and Password':
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
@@ -127,10 +120,8 @@ while not flag:
 
     if c == "Login":
         flag = login()
-
     elif c == "Sign Up":
         flag = sign_up()
-
     elif c == "Exit":
         sys.exit(0)
 
@@ -144,58 +135,50 @@ while flag:
     
     if c == 'View Stored Passwords':
         a = cli_ui.ask_choice("Would you like to", choices=achoices)
-
         if a == 'Filter by Website':
             info = filter_website()
             helper.clear_screen()
             print(info)
-
         elif a == 'Filter by Username':
             info = filter_username()
             helper.clear_screen()
             print(info)
-            
         elif a == 'View All':
             info = user_info.get_all_password()
             helper.clear_screen()
             print(info)
-    
     elif c == 'Log Out':
         helper.clear_screen()
         print("Logged Out.")
         sys.exit(0)
-    
     elif c == 'Add New Passwords':
         helper.clear_screen()
         flag = add_passwords()
-    
     elif c == 'Edit Passwords':
         helper.clear_screen()
         flag = edit()
-    
     elif c == 'Delete Passwords':
         helper.clear_screen()
         flag = delete()
-    
     elif c == 'Password Generator':
         helper.clear_screen()
         type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
         type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
         type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
         type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
-        password = helper.password_generator_main(type1, type2, type3, type4)
+        length = int(input("How many characters do you want in your password? "))
+        password = helper.password_generator_main(type1, type2, type3, type4, length)
 
         if password:
             choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
-
             if choice == True:
                 website = cli_ui.ask_string("Please enter the website\'s name")
                 username = cli_ui.ask_string("Please enter your username")
                 user_info.add_password(website, username, password)
                 helper.clear_screen()
                 print("The password has been added.")
-
             elif choice == False:
                 helper.clear_screen()
+
         flag = True

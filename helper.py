@@ -9,18 +9,12 @@ def printdashes():
 def clear_screen():
     print('\033[H\033[J')
 
-def password_generator_main(type1, type2, type3, type4):
+def password_generator_main(type1, type2, type3, type4, length):
     condition = True
-
-    while condition:
-        length = int(input("How many characters do you want in your password? "))
-
+    while condition:      
         if type1 == True:
-
             if type2 == True:
-
                 if type3 == True:
-
                     if type4 == True:
                         sample_space = string.ascii_letters + string.punctuation + string.digits
                         password = ''.join((random.choice(sample_space) for i in range(length)))
@@ -36,7 +30,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         elif c == False:
                             condition = True                        
                         
@@ -55,12 +48,10 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         elif c == False:
                             condition = True 
 
                 else:
-
                     if type4 == True:
                         sample_space = string.ascii_letters + string.digits
                         password = ''.join((random.choice(sample_space) for i in range(length)))
@@ -76,7 +67,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -95,14 +85,11 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                     
             else:
-
                 if type3 == True:
-
                     if type4 == True:
                         sample_space = string.ascii_uppercase + string.punctuation + string.digits
                         password = ''.join((random.choice(sample_space) for i in range(length)))
@@ -118,7 +105,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -137,9 +123,9 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
-                            condition = True 
+                            condition = True
+
                 else:
                     if type4 == True:
                         sample_space = string.ascii_uppercase + string.digits
@@ -156,7 +142,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -175,16 +160,12 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
 
         else:
-            
             if type2 == True:
-
                 if type3 == True:
-
                     if type4 == True:
                         sample_space = string.ascii_lowercase + string.punctuation + string.digits
                         password = ''.join((random.choice(sample_space) for i in range(length)))
@@ -200,7 +181,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -219,12 +199,10 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
 
                 else:
-
                     if type4 == True:
                         sample_space = string.ascii_lowercase + string.digits
                         password = ''.join((random.choice(sample_space) for i in range(length)))
@@ -240,7 +218,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -259,14 +236,11 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                     
             else:
-
                 if type3 == True:
-
                     if type4 == True:
                         sample_space = string.punctuation + string.digits
                         password = ''.join((random.choice(sample_space) for i in range(length)))
@@ -282,7 +256,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -301,7 +274,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
 
@@ -321,7 +293,6 @@ def password_generator_main(type1, type2, type3, type4):
                             print("The password has been copied to your clipboard.")
                             condition = False
                             return password
-
                         else:
                             condition = True 
                         
@@ -331,7 +302,6 @@ def password_generator_main(type1, type2, type3, type4):
 
                         if c == True:
                             condition = True
-                        
                         else:
                             clear_screen()
                             condition = False

@@ -54,16 +54,17 @@ def add_passwords():
         type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
         type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
         type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
-        password = helper.password_generator_main(type1, type2, type3, type4)
+        length = int(input("How many characters do you want in your password? "))
+        password = helper.password_generator_main(type1, type2, type3, type4, length)
         choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
         if choice == True:
             user_info.add_password(website, username, password)
             print("The password has been added.")
-        elif choice == False:
+        else:
             helper.clear_screen()
-            add_passwords()
-    elif choice1 == False:
+            return True
+    else:
         password1 = cli_ui.ask_string("Please enter your password")
         user_info.add_password(website, username, password1)
         print("The password has been added.")
@@ -80,19 +81,19 @@ def filter_username():
     return user_info.filter_username(username)
 
 def edit():
-    user_info.edit_account_choice()
+    response = user_info.edit_account_choice()
     choices = ['Password', 'Username', 'Username and Password']
     a = cli_ui.ask_choice("What would you like to edit?", choices=choices)
 
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        user_info.edit(f'password = "{new_password}"')
+        user_info.edit(f'password = "{new_password}"', response[0])
         helper.clear_screen()
         print("Records have been updated.")
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        user_info.edit(f'username = "{new_username}"')
+        user_info.edit(f'username = "{new_username}"', response[0])
         helper.clear_screen()
         print("Records have been updated.")
         return True
@@ -100,7 +101,7 @@ def edit():
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
         user_info.edit(
-            f'username = "{new_username}" AND password = "{new_password}"')
+            f'username = "{new_username}" AND password = "{new_password}"', response[0])
         helper.clear_screen()
         print("Records have been updated.")
         return True

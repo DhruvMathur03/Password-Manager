@@ -16,7 +16,7 @@ def login():
     password = cli_ui.ask_password("Password")
     does_user_exist = database.find(
         'Users', f'email = "{email}" AND password="{password}"')
-
+    
     if len(does_user_exist) > 0:
         user_info = user.User(does_user_exist[0][0], email, database)
         helper.clear_screen()
@@ -50,11 +50,11 @@ def add_passwords():
         "Would you like to generate a new password?", default=False)
 
     if choice1 == True:
+        length = int(input("How many characters do you want in your password? "))
         type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
         type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
         type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
         type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
-        length = int(input("How many characters do you want in your password? "))
         password = helper.password_generator_main(type1, type2, type3, type4, length)
         choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
@@ -87,13 +87,13 @@ def edit():
 
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        user_info.edit(f'password = "{new_password}"', response[0])
+        user_info.edit(f'password = "{new_password}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        user_info.edit(f'username = "{new_username}"', response[0])
+        user_info.edit(f'username = "{new_username}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True
@@ -101,7 +101,7 @@ def edit():
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
         user_info.edit(
-            f'username = "{new_username}" AND password = "{new_password}"', response[0])
+            f'username = "{new_username}" AND password = "{new_password}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True
@@ -163,11 +163,11 @@ while flag:
         flag = delete()
     elif c == 'Password Generator':
         helper.clear_screen()
+        length = int(input("How many characters do you want in your password? "))
         type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
         type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
         type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
         type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
-        length = int(input("How many characters do you want in your password? "))
         password = helper.password_generator_main(type1, type2, type3, type4, length)
 
         if password:

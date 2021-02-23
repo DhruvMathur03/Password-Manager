@@ -59,10 +59,9 @@ class User:
             "Which account would you like to edit", choices=choices)
         return account_to_be_edited    
         
-    def edit(self, changes, website):
-        account = self.database.find('user_data', f'user_ID = {self.user_id}')     
+    def edit(self, changes, website, username):
         self.database.modify('user_data', changes,
-            f'website = "{website}"')
+            f'website = "{website}" AND username = "{username}"')
 
     def delete(self):
         account = self.database.find('user_data', f'user_ID = {self.user_id}')

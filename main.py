@@ -17,7 +17,7 @@ def login():
     password = cli_ui.ask_password("Password")
     does_user_exist = database.find(
         'Users', f'email = "{email}" AND password="{password}"')
-
+    
     if len(does_user_exist) > 0:
         user_info = user.User(does_user_exist[0][0], email, database)
         helper.clear_screen()
@@ -41,6 +41,7 @@ def sign_up():
         pwd1 = cli_ui.ask_password("please enter password")
         database.insert('Users', {'email': email, 'password': pwd1})
         helper.clear_screen()
+        print("Signed Up.")
         return login()
 
 def add_passwords():
@@ -50,21 +51,24 @@ def add_passwords():
         "Would you like to generate a new password?", default=False)
 
     if choice1 == True:
-        length = int(input("Enter required Length of Password :"))
-        password = helper.password_generator(length)
-        print(password)
-        clipboard.copy(password)
-        print("The password has been copied to your clipboard")
+        length = int(input("How many characters do you want in your password? "))
+        type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
+        type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
+        type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
+        type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
+        password = helper.password_generator_main(type1, type2, type3, type4, length)
         choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
         if choice == True:
             user_info.add_password(website, username, password)
-        elif choice == False:
+            print("The password has been added.")
+        else:
             helper.clear_screen()
-            add_passwords()
-    elif choice1 == False:
+            return True
+    else:
         password1 = cli_ui.ask_string("Please enter your password")
         user_info.add_password(website, username, password1)
+        print("The password has been added.")
         helper.clear_screen()
 
     return True
@@ -78,33 +82,36 @@ def filter_username():
     return user_info.filter_username(username)
 
 def edit():
-    user_info.edit_account_choice()
     today = date.today()
+    response = user_info.edit_account_choice()
     choices = ['Password', 'Username', 'Username and Password']
     a = cli_ui.ask_choice("What would you like to edit?", choices=choices)
 
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        user_info.edit(f'password = "{new_password}", Date_Modified = "{today}"')
+        user_info.edit(f'password = "{new_password}", Date_Modified = "{today}"', response[0], response[1])
         helper.clear_screen()
+        print("Records have been updated.")
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        user_info.edit(f'username = "{new_username}", Date_Modified = "{today}"')
+        user_info.edit(f'username = "{new_username}", Date_Modified = "{today}"', response[0], response[1)
         helper.clear_screen()
+        print("Records have been updated.")
         return True
     elif a == 'Username and Password':
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
         user_info.edit(
-            f'username = "{new_username}", password = "{new_password}", Date_Modified = "{today}"')
+            f'username = "{new_username}", password = "{new_password}", Date_Modified = "{today}"', response[0], response[1])
         helper.clear_screen()
-
+        print("Records have been updated.")
         return True
 
 def delete():
     user_info.delete()
     helper.clear_screen()
+    print("Account records have been deleted.")
     return True
 
 choices = ['Login', 'Sign Up', 'Exit']
@@ -122,7 +129,7 @@ while not flag:
         sys.exit(0)
 
 logged_in_choices = ['View Stored Passwords', 'Log Out',
-                     'Add New Passwords', 'Generate New Password', 'Edit Passwords', 'Delete Passwords']
+                     'Add New Passwords', 'Edit Passwords', 'Delete Passwords', 'Password Generator']
 
 achoices = ['Filter by Website', 'Filter by Username', 'View All']
 
@@ -145,29 +152,36 @@ while flag:
             print(info)
     elif c == 'Log Out':
         helper.clear_screen()
+        print("Logged Out.")
         sys.exit(0)
     elif c == 'Add New Passwords':
         helper.clear_screen()
         flag = add_passwords()
-    elif c == 'Generate New Password':
-        length = int(input("Enter required Length of Password :"))
-        password = helper.password_generator(length)
-        print(password)
-        clipboard.copy(password)
-        print("The password has been copied to your clipboard")
-        choice = cli_ui.ask_yes_no(
-            "Would you like to add this password", default=False)
-        if choice == True:
-            website = cli_ui.ask_string("Enter the website name")
-            username = cli_ui.ask_string("Enter the username")
-            helper.clear_screen()
-            user_info.add_password(website, username, password)
-        elif choice == False:
-            helper.clear_screen()
-            flag = True
     elif c == 'Edit Passwords':
         helper.clear_screen()
         flag = edit()
     elif c == 'Delete Passwords':
         helper.clear_screen()
         flag = delete()
+    elif c == 'Password Generator':
+        helper.clear_screen()
+        length = int(input("How many characters do you want in your password? "))
+        type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
+        type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
+        type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
+        type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
+        password = helper.password_generator_main(type1, type2, type3, type4, length)
+
+        if password:
+            choice = cli_ui.ask_yes_no(
+            "Would you like to add this password", default=False)
+            if choice == True:
+                website = cli_ui.ask_string("Please enter the website\'s name")
+                username = cli_ui.ask_string("Please enter your username")
+                user_info.add_password(website, username, password)
+                helper.clear_screen()
+                print("The password has been added.")
+            elif choice == False:
+                helper.clear_screen()
+
+        flag = True

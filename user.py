@@ -32,6 +32,7 @@ class User:
         account_details = self.database.find(
             'user_data', f'website = "{website}" AND user_ID = {self.user_id}')
         table = PrettyTable(["Username", "Password", "Date Created", "Date Modified"])
+        
         for i in range(len(account_details)):
             table.add_row([account_details[i][2], account_details[i][3], account_details[i][5], account_details[i][6]])
         return table
@@ -45,12 +46,6 @@ class User:
             table.add_row([account_details[i][1], account_details[i][3], account_details[i][5], account_details[i][6]])
         return table
 
-    def edit(self, changes):
-        account = self.database.find('user_data', f'user_ID = {self.user_id}')
-        website = account[0][1]
-        self.database.modify('user_data', changes,
-            f'website = "{website}"')
-
     def edit_account_choice(self):
         account = self.database.find('user_data', f'user_ID = {self.user_id}')
         account_choices = []
@@ -61,7 +56,12 @@ class User:
         choices = account_choices
         account_to_be_edited = cli_ui.ask_choice(
             "Which account would you like to edit", choices=choices)
+        return account_to_be_edited    
         
+    def edit(self, changes, website, username):
+        self.database.modify('user_data', changes,
+            f'website = "{website}" AND username = "{username}"')
+
     def delete(self):
         account = self.database.find('user_data', f'user_ID = {self.user_id}')
         account_choices = []

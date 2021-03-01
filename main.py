@@ -5,6 +5,7 @@ import db
 import user
 import helper
 import clipboard
+from datetime import date
 
 database = db.DB("pugsey.db")
 user_info = None
@@ -81,19 +82,20 @@ def filter_username():
     return user_info.filter_username(username)
 
 def edit():
+    today = date.today()
     response = user_info.edit_account_choice()
     choices = ['Password', 'Username', 'Username and Password']
     a = cli_ui.ask_choice("What would you like to edit?", choices=choices)
 
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        user_info.edit(f'password = "{new_password}"', response[0], response[1])
+        user_info.edit(f'password = "{new_password}", Date_Modified = "{today}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        user_info.edit(f'username = "{new_username}"', response[0], response[1])
+        user_info.edit(f'username = "{new_username}", Date_Modified = "{today}"', response[0], response[1)
         helper.clear_screen()
         print("Records have been updated.")
         return True
@@ -101,7 +103,7 @@ def edit():
         new_password = cli_ui.ask_string("Enter new Password")
         new_username = cli_ui.ask_string("Enter new Username")
         user_info.edit(
-            f'username = "{new_username}" AND password = "{new_password}"', response[0], response[1])
+            f'username = "{new_username}", password = "{new_password}", Date_Modified = "{today}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True

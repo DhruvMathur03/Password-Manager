@@ -20,6 +20,7 @@ class User:
 
         for i in range(len(b)):
             table.add_row(b[i][1:4])
+            
         return table 
 
     def add_password(self, website, username, password):
@@ -33,6 +34,7 @@ class User:
 
         for i in range(len(account_details)):
             table.add_row(account_details[i][2:4])
+
         return table
 
     def filter_username(self, username):
@@ -42,13 +44,8 @@ class User:
 
         for i in range(len(account_details)):
             table.add_row([account_details[i][1], account_details[i][3]])
-        return table
 
-    def edit(self, changes):
-        account = self.database.find('user_data', f'user_ID = {self.user_id}')
-        website = account[0][1]
-        self.database.modify('user_data', changes,
-            f'website = "{website}"')
+        return table
 
     def edit_account_choice(self):
         account = self.database.find('user_data', f'user_ID = {self.user_id}')
@@ -60,7 +57,12 @@ class User:
         choices = account_choices
         account_to_be_edited = cli_ui.ask_choice(
             "Which account would you like to edit", choices=choices)
+        return account_to_be_edited    
         
+    def edit(self, changes, website, username):
+        self.database.modify('user_data', changes,
+            f'website = "{website}" AND username = "{username}"')
+
     def delete(self):
         account = self.database.find('user_data', f'user_ID = {self.user_id}')
         account_choices = []

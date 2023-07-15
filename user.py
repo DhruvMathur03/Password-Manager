@@ -4,6 +4,10 @@ import sys
 import db
 from prettytable import PrettyTable
 from datetime import date
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from hashlib import sha256
+import base64
 
 class User:
     email = None
@@ -20,13 +24,19 @@ class User:
         table = PrettyTable(["Website", "Username", "Password", "Date Created", "Date Modified"])
 
         for i in range(len(b)):
-            table.add_row([b[i][1], b[i][2], b[i][3], b[i][5], b[i][6]])
-        return table 
+            encrypted_password = base64.b64decode(b[i][3])
+            cipher = AES.new(self.email.encode()[:16], AES.MODE_CBC, iv=encrypted_password[:16])
+            decrypted_password = unpad(cipher.decrypt(encrypted_password[16:]), AES.block_size).decode()
+            table.add_row([b[i][1], b[i][2], decrypted_password, b[i][5], b[i][6]])
+        return table
 
     def add_password(self, website, username, password):
         today = date.today()
+        hashed_password = sha256(password.encode()).hexdigest()
+        cipher = AES.new(self.email.encode()[:16], AES.MODE_CBC)
+        encrypted_password = base64.b64encode(cipher.iv + cipher.encrypt(pad(hashed_password.encode(), AES.block_size)))
         self.database.insert('user_data', {
-            'website': website, 'username': username, 'password': password, 'user_ID': self.user_id, 'Date_Created': today})
+            'website': website, 'username': username, 'password': encrypted_password, 'user_ID': self.user_id, 'Date_Created': today})
 
     def filter_website(self, website):
         account_details = self.database.find(
@@ -59,6 +69,11 @@ class User:
         return account_to_be_edited    
         
     def edit(self, changes, website, username):
+        new_password = changes['password']
+        hashed_password = sha256(new_password.encode()).hexdigest()
+        cipher = AES.new(self.email.encode()[:16], AES.MODE_CBC)
+        encrypted_password = base64.b64encode(cipher.iv + cipher.encrypt(pad(hashed_password.encode(), AES.block_size)))
+        changes['password'] = encrypted_password
         self.database.modify('user_data', changes,
             f'website = "{website}" AND username = "{username}"')
 

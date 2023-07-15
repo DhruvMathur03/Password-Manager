@@ -6,6 +6,10 @@ import user
 import helper
 import clipboard
 from datetime import date
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+from hashlib import sha256
+import base64
 
 database = db.DB("pugsey.db")
 user_info = None
@@ -15,8 +19,9 @@ def login():
     print("Login")
     email = cli_ui.ask_string("Email")
     password = cli_ui.ask_password("Password")
+    hashed_password = sha256(password.encode()).hexdigest()
     does_user_exist = database.find(
-        'Users', f'email = "{email}" AND password="{password}"')
+        'Users', f'email = "{email}" AND password="{hashed_password}"')
     
     if len(does_user_exist) > 0:
         user_info = user.User(does_user_exist[0][0], email, database)
@@ -39,7 +44,8 @@ def sign_up():
         return False
     else:
         pwd1 = cli_ui.ask_password("please enter password")
-        database.insert('Users', {'email': email, 'password': pwd1})
+        hashed_password = sha256(pwd1.encode()).hexdigest()
+        database.insert('Users', {'email': email, 'password': hashed_password})
         helper.clear_screen()
         print("Signed Up.")
         return login()

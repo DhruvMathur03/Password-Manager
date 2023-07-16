@@ -21,8 +21,30 @@ The Password Manager includes a built-in password generator. This feature allows
 
 ### Advanced Encryption with AES and SHA-256
 Password Manager employs advanced encryption techniques to ensure the security of your data. It uses the AES (Advanced Encryption Standard) and SHA-256 (Secure Hash Algorithm 256-bit) for encryption and hashing respectively. These are implemented through the use of the 'Pycryptodome' and 'hashlib' libraries.
-\\
+<br>
 Passwords are not stored in plain text, but are encrypted using AES before being stored in the database. Additionally, SHA-256 is used for hashing critical data to ensure integrity and security. This means that even if someone were to gain access to the database file, they would not be able to read your passwords without the encryption key. This adds an additional layer of security, protecting your data even in the event of a breach.
 
 ### Multi-User Support
 The Password Manager supports multiple users. Each user has their own separate and secure space for password storage. This makes it ideal for shared devices or for people who want to keep their work and personal passwords separate.
+
+## Installation
+
+1. Clone the repository
+   ```
+   git clone https://github.com/DhruvMathur03/Password-Manager.git
+   ```
+2. Navigate to the project directory
+   ```
+   cd Password-Manager
+   ```
+3. Install the required dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+## Usage 
+
+Run the main script
+```
+python3 main.py
+```

@@ -14,6 +14,7 @@ import base64
 database = db.DB("pugsey.db")
 user_info = None
 
+
 def login():
     global user_info
     print("Login")
@@ -22,7 +23,7 @@ def login():
     hashed_password = sha256(password.encode()).hexdigest()
     does_user_exist = database.find(
         'Users', f'email = "{email}" AND password="{hashed_password}"')
-    
+
     if len(does_user_exist) > 0:
         user_info = user.User(does_user_exist[0][0], email, database)
         helper.clear_screen()
@@ -32,6 +33,7 @@ def login():
         helper.clear_screen()
         print("Incorrect ID or Password")
         return False
+
 
 def sign_up():
     print("Sign up")
@@ -50,6 +52,7 @@ def sign_up():
         print("Signed Up.")
         return login()
 
+
 def add_passwords():
     website = cli_ui.ask_string("Please enter the website\'s name")
     username = cli_ui.ask_string("Please enter your username")
@@ -57,12 +60,17 @@ def add_passwords():
         "Would you like to generate a new password?", default=False)
 
     if choice1 == True:
-        length = int(input("How many characters do you want in your password? "))
-        type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
-        type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
-        type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
+        length = int(
+            input("How many characters do you want in your password? "))
+        type1 = cli_ui.ask_yes_no(
+            "Do you want Upper Case Characters in your password?")
+        type2 = cli_ui.ask_yes_no(
+            "Do you want Lower Case Characters in your password?")
+        type3 = cli_ui.ask_yes_no(
+            "Do you want Special Characters in your password?")
         type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
-        password = helper.password_generator_main(type1, type2, type3, type4, length)
+        password = helper.password_generator_main(
+            type1, type2, type3, type4, length)
         choice = cli_ui.ask_yes_no(
             "Would you like to add this password", default=False)
         if choice == True:
@@ -79,13 +87,16 @@ def add_passwords():
 
     return True
 
+
 def filter_website():
     website = cli_ui.ask_string("Please enter the name of the website")
     return user_info.filter_website(website)
 
+
 def filter_username():
     username = cli_ui.ask_string("Please enter your common Username")
     return user_info.filter_username(username)
+
 
 def edit():
     today = date.today()
@@ -95,13 +106,15 @@ def edit():
 
     if a == 'Password':
         new_password = cli_ui.ask_string("Enter new Password")
-        user_info.edit(f'password = "{new_password}", Date_Modified = "{today}"', response[0], response[1])
+        user_info.edit(
+            f'password = "{new_password}", Date_Modified = "{today}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True
     elif a == 'Username':
         new_username = cli_ui.ask_string("Enter new Username")
-        user_info.edit(f'username = "{new_username}", Date_Modified = "{today}"', response[0], response[1)
+        user_info.edit(
+            f'username = "{new_username}", Date_Modified = "{today}"', response[0], response[1])
         helper.clear_screen()
         print("Records have been updated.")
         return True
@@ -114,11 +127,13 @@ def edit():
         print("Records have been updated.")
         return True
 
+
 def delete():
     user_info.delete()
     helper.clear_screen()
     print("Account records have been deleted.")
     return True
+
 
 choices = ['Login', 'Sign Up', 'Exit']
 
@@ -141,7 +156,7 @@ achoices = ['Filter by Website', 'Filter by Username', 'View All']
 
 while flag:
     c = cli_ui.ask_choice("Would you like to", choices=logged_in_choices)
-    
+
     if c == 'View Stored Passwords':
         a = cli_ui.ask_choice("Would you like to", choices=achoices)
         if a == 'Filter by Website':
@@ -171,16 +186,21 @@ while flag:
         flag = delete()
     elif c == 'Password Generator':
         helper.clear_screen()
-        length = int(input("How many characters do you want in your password? "))
-        type1 = cli_ui.ask_yes_no("Do you want Upper Case Characters in your password?")
-        type2 = cli_ui.ask_yes_no("Do you want Lower Case Characters in your password?")
-        type3 = cli_ui.ask_yes_no("Do you want Special Characters in your password?")
+        length = int(
+            input("How many characters do you want in your password? "))
+        type1 = cli_ui.ask_yes_no(
+            "Do you want Upper Case Characters in your password?")
+        type2 = cli_ui.ask_yes_no(
+            "Do you want Lower Case Characters in your password?")
+        type3 = cli_ui.ask_yes_no(
+            "Do you want Special Characters in your password?")
         type4 = cli_ui.ask_yes_no("Do you want Numbers in your password?")
-        password = helper.password_generator_main(type1, type2, type3, type4, length)
+        password = helper.password_generator_main(
+            type1, type2, type3, type4, length)
 
         if password:
             choice = cli_ui.ask_yes_no(
-            "Would you like to add this password", default=False)
+                "Would you like to add this password", default=False)
             if choice == True:
                 website = cli_ui.ask_string("Please enter the website\'s name")
                 username = cli_ui.ask_string("Please enter your username")
